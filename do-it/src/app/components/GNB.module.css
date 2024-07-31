@@ -1,0 +1,40 @@
+.nav {
+    border-bottom: 1px solid #E2E8F0;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 154px;
+    height: 40px;
+    background-image: url('/images/logo-large.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left center;
+    cursor: pointer;
+}
+
+@media (max-width: 1920px) {
+    .nav{
+        padding: 0 250px;
+    }
+}
+
+@media (max-width: 744px) {
+    .nav {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 375px) {
+    .nav {
+        padding: 0 20px;
+    }
+
+    .logo {
+        background-image: url('/images/logo-small.svg');
+        width: 71px;
+    }
+}
