@@ -1,0 +1,62 @@
+.form {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+    margin: 20px;
+    flex-wrap: nowrap;
+}
+
+.input {
+    border: none;
+    background-image: url('/images/search.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 1000px;
+    padding: 0 30px 3px 30px;
+    font-size: 1.2rem;
+    height: 56px;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.button {
+    border: none;
+    background-image: url('/btn/Type=Add, Size=Large, State=Default.svg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 56px;
+    width:156px;
+}
+
+@media (max-width: 1920px) {
+
+}
+
+/* For tablets and small desktops (up to 744px) */
+@media (max-width: 744px) {
+    .input {
+        width: calc(100% - 20px);
+    }
+
+    .button {
+        width: 100%;
+        max-width: 120px;
+    }
+}
+/* For mobile devices (up to 375px) */
+@media (max-width: 375px) {
+    .input {
+        max-width: calc(100% - 100px);
+        padding: 0 15px 3px 15px;
+    }
+
+    .button {
+        width: 100px;
+    }
+}

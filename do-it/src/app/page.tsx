@@ -1,12 +1,16 @@
-import GNB from "./components/GNB";
+"use client";
 
-export default function Home() {
+import { useState } from 'react';
+import GNB from '@/app/components/GNB'
+import TodoInput from '@/app/components/TodoInput'
+
+const Home: React.FC = () => {
     return (
         <div>
             <GNB />
-            <main>
-                <h1>Welcome to Next.js!</h1>
-            </main>
+            <TodoInput/>
         </div>
     );
-}
+};
+
+export default Home;
