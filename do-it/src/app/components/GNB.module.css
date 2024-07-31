@@ -17,20 +17,20 @@
 }
 
 @media (max-width: 1920px) {
-    .nav{
-        padding: 0 250px;
+    .nav {
+        padding-left: 17vw;
     }
 }
 
 @media (max-width: 744px) {
     .nav {
-        padding: 0 20px;
+        padding-left: 2vw;
     }
 }
 
 @media (max-width: 375px) {
     .nav {
-        padding: 0 20px;
+        padding: 0 5vw;
     }
 
     .logo {
