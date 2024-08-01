@@ -43,5 +43,7 @@
 
 /* text 클래스 */
 .text {
-    
+    font-family: var(--font-family-nanum);
+    font-size: var(--font-size-16px);
+    font-weight: var(--font-weight-700);
 }
