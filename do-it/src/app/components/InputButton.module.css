@@ -12,8 +12,8 @@
 
 .buttonChild {
     position: absolute;
-    top: 4px;
-    left: 6.65px;    
+    top: 0.8px;
+    left: 3px;    
     width: 100%;
     max-width: 164.35px;
     height: 52px;
@@ -21,7 +21,6 @@
     background-color: var(--slate-900);
     border: 2px solid var(--slate-900);
     z-index: -1;
-    box-sizing: border-box;
 }
 
 
@@ -36,14 +35,29 @@
     gap: 5px;
 }
 
-/* icon 클래스 */
-.icon {
 
-}
-
-/* text 클래스 */
 .text {
     font-family: var(--font-family-nanum);
     font-size: var(--font-size-16px);
     font-weight: var(--font-weight-700);
+}
+
+@media (max-width: 444px) {
+    .button {
+        max-width: 54.78px;
+        width:100%;
+        height: 52px;   
+    }
+    
+    .buttonChild {
+        max-width: 54.78px;
+        width: 100%;
+        height: 52px;
+        top: -0.5px;
+        left: 0px;
+    }
+
+    .text {
+        display: none;
+    }
 }

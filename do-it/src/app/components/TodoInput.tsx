@@ -1,30 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './TodoInput.module.css';
 import InputButton from '@/app/components/InputButton';
+import { TodoInputProps, TodoItem } from '@/app/components/types';
 
-const generateUniqueId = () => {
-    return 'id-' + new Date().getTime() + '-' + Math.floor(Math.random() * 1000);
-};
+const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
+    const [name, setName] = useState<string>('');
+    const [response, setResponse] = useState<TodoItem | null>(null);
+    const enterPressedRef = useRef<boolean>(false); 
 
-const TodoInput = () => {
-    const [name, setName] = useState<string>("");
-    const [response, setResponse] = useState<any>(null);
-    const [tenantId, setTenantId] = useState<string>(); 
-
-    //tenantId localStorage에 저장해서 기억하기
-    useEffect(() => {
-        const storedTenantId = localStorage.getItem('tenantId');
-        if (storedTenantId) {
-            setTenantId(storedTenantId);
-        } else {
-            const newTenantId = generateUniqueId(); 
-            localStorage.setItem('tenantId', newTenantId);
-            setTenantId(newTenantId);
-        }
-    }, [])
-
-    const handleSubmit = async (event?: React.FormEvent) => {
-        event?.preventDefault(); // 기본 폼 제출 동작 방지
+    const handleSubmit = async () => {
+        if (!name.trim()) return; 
 
         try {
             const url = `https://assignment-todolist-api.vercel.app/api/${tenantId}/items`;
@@ -38,23 +23,32 @@ const TodoInput = () => {
             });
 
             if (!res.ok) {
-                const errorText = await res.text(); 
+                const errorText = await res.text();
                 throw new Error(`Network response was not ok: ${errorText}`);
             }
 
             const data = await res.json();
             setResponse(data);
-            setName("")
+            setName('');
+            onAddItem(data);
         } catch (error) {
             console.error('Fetch error:', error);
         }
     };
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            handleSubmit();
+    // Enter 키 입력 시 기본 동작 방지 및 중복 제출 방지
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+
+            if (!enterPressedRef.current) {
+                enterPressedRef.current = true; 
+                setTimeout(() => {
+                    enterPressedRef.current = false;
+                }, 500);
+            }
         }
-    }
+    };
 
     return (
         <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
@@ -64,12 +58,12 @@ const TodoInput = () => {
                     className={styles.input}
                     placeholder="할 일을 입력하세요"
                     onChange={(e) => setName(e.target.value)}
-                    onKeyDown={handleKeyPress}
+                    onKeyDown={handleKeyDown} 
                     value={name}
                 />
                 <div className={styles.inputChild} />
             </div>
-            <InputButton onClick={handleSubmit} />
+            <InputButton onClick={handleSubmit} /> 
             {response && <div>Response: {JSON.stringify(response)}</div>}
         </form>
     );
