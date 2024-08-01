@@ -1,0 +1,11 @@
+/* Icon.module.css */
+.icon {
+    width: 16px;
+    height: 16px;
+}
+
+.path {
+    stroke: var(--slate-900);
+    stroke-width: 2;
+    stroke-linecap: round;
+}

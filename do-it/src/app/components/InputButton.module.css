@@ -1,0 +1,47 @@
+.button {
+    width: 100%;
+    max-width: 164.35px;
+    height: 52px;
+    border: 2px solid var(--slate-900);
+    border-radius: 24px;
+    position: relative;
+    box-sizing: border-box;
+    background-color: var(--slate-200);
+    cursor: pointer;
+}
+
+.buttonChild {
+    position: absolute;
+    top: 4px;
+    left: 3.65px;    
+    width: 100%;
+    max-width: 164.35px;
+    height: 52px;
+    border-radius: 24px;
+    background-color: var(--slate-900);
+    border: 2px solid var(--slate-900);
+    z-index: -1;
+    box-sizing: border-box;
+}
+
+
+/* textParent 클래스 */
+.textParent {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* icon 클래스 */
+.icon {
+
+}
+
+/* text 클래스 */
+.text {
+    
+}
