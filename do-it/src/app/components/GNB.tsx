@@ -8,7 +8,8 @@ const GNB: React.FC = () => {
     const router = useRouter();
 
     const handleLogoClick = () => {
-        router.push('/');
+                window.location.href = '/';
+
     };
 
     return (
