@@ -46,7 +46,7 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onTog
                             <Image 
                                 width={32} 
                                 height={32} 
-                                src={`/ic/Property 1=${item.isCompleted ? 'Frame 2610233' : 'Default'}.svg`} 
+                                src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} 
                                 alt={item.isCompleted ? "Checked" : "Check"} 
                                 className={`${styles.icon} ${item.isCompleted ? styles.completed : ''}`} 
                             />
