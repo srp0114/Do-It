@@ -42,15 +42,15 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onTog
                     </div>
                 ) : (
                     filteredItems.map((item) => (
-                        <div key={item.id} className={styles.itemContainer} onClick={() => onToggleComplete(item.id)}>
+                        <div key={item.id} className={`${styles.itemContainer} ${item.isCompleted ? styles.completed : styles.notDone}`} onClick={() => onToggleComplete(item.id)}>
                             <Image 
                                 width={32} 
                                 height={32} 
                                 src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} 
                                 alt={item.isCompleted ? "Checked" : "Check"} 
-                                className={`${styles.icon} ${item.isCompleted ? styles.completed : ''}`} 
+                                className={styles.icon}
                             />
-                            <div className={styles.name}>{item.name}</div>
+                            <div className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`}>{item.name}</div>
                         </div>
                     ))
                 )}
