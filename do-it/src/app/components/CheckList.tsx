@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from "next/image";
 import styles from '@/app/components/CheckList.module.css';
 import { CheckListProps } from '@/app/components/types';
 
-interface ExtendedCheckListProps extends CheckListProps {
+interface Item {
+    id: number;
+    name: string;
     isCompleted: boolean;
+    tenantId: string;
 }
 
-const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted }) => {
-    const [active, setActive] = useState<boolean>(false);
+interface ExtendedCheckListProps extends CheckListProps {
+    isCompleted: boolean;
+    items: Item[];
+    onToggleComplete: (itemId: number) => void;
+}
 
-    const handleClick = () => {
-        setActive(!active);
-    };
-
+const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onToggleComplete }) => {
+    // 필터링된 항목 가져오기
     const filteredItems = items.filter(item => item.isCompleted === isCompleted);
     const title = isCompleted ? "done" : "todo";
-    const emptyMessage = isCompleted ? "완료된 할 일이 없어요." : "아직 다 한 일이 없어요." 
-    const nextMessage = isCompleted ? "해야 할 일을 체크해보세요!" :  "TODO를 새롭게 추가해주세요!"
+    const emptyMessage = isCompleted ? "완료된 할 일이 없어요." : "아직 다 한 일이 없어요."; 
+    const nextMessage = isCompleted ? "해야 할 일을 체크해보세요!" : "TODO를 새롭게 추가해주세요!";
     
     return (
         <div className={styles.container}>
@@ -38,8 +42,14 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted }) => 
                     </div>
                 ) : (
                     filteredItems.map((item) => (
-                        <div key={item.id} className={styles.itemContainer}>
-                            <Image width={32} height={32} src={"/ic/Property 1=Default.svg"} alt={"Check"} className={`${styles.icon} ${active ? styles.active : ''}`}/>
+                        <div key={item.id} className={styles.itemContainer} onClick={() => onToggleComplete(item.id)}>
+                            <Image 
+                                width={32} 
+                                height={32} 
+                                src={`/ic/Property 1=${item.isCompleted ? 'Frame 2610233' : 'Default'}.svg`} 
+                                alt={item.isCompleted ? "Checked" : "Check"} 
+                                className={`${styles.icon} ${item.isCompleted ? styles.completed : ''}`} 
+                            />
                             <div className={styles.name}>{item.name}</div>
                         </div>
                     ))

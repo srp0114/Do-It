@@ -2,6 +2,7 @@ export interface TodoItem {
     id: number;
     name: string;
     isCompleted: boolean;
+    tenantId: string;
 }
 
 export interface TodoInputProps {

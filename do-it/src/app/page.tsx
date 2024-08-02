@@ -20,7 +20,6 @@ const Home: React.FC = () => {
     };
 
 
-    // Effect to initialize tenantId
     useEffect(() => {
         const storedTenantId = localStorage.getItem('tenantId');
         if (storedTenantId) {
@@ -30,9 +29,7 @@ const Home: React.FC = () => {
             localStorage.setItem('tenantId', newTenantId);
             setTenantId(newTenantId);
         }
-    }, []); // Empty dependency array ensures this runs only once on mount
-
-    // Effect to fetch items when tenantId is set
+    }, []);
     useEffect(() => {
         const fetchItems = async () => {
             if (!tenantId) return;
@@ -53,17 +50,43 @@ const Home: React.FC = () => {
         fetchItems();
     }, [tenantId]); 
     
+    const handleToggleComplete = async (itemId: number) => {
+        const itemIndex = items.findIndex(item => item.id === itemId);
+        const item = items[itemIndex];
+
+        try {
+            const response = await fetch(`https://assignment-todolist-api.vercel.app/api/${tenantId}/items/${item.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ isCompleted: !item.isCompleted }),
+            });
+
+            if (response.ok) {
+                const updatedItem = await response.json();
+                const updatedItems = [...items];
+                updatedItems[itemIndex] = updatedItem;
+                setItems(updatedItems);
+            } else {
+                console.error('Failed to update item');
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    };
+
     return (
           <div>
             <GNB />
             <div className={styles.contentContainer} >
-                <TodoInput tenantId={tenantId} onAddItem={handleAddItem} />
-                <div className={styles.checklists}>
-                    <CheckList items={items} isCompleted={false} />
-                    <CheckList items={items} isCompleted={true}/>
-                </div>
-                </div>
+            <TodoInput tenantId={tenantId} onAddItem={handleAddItem} />
+            <div className={styles.checklists}>
+                <CheckList items={items} isCompleted={false} onToggleComplete={handleToggleComplete} />
+                <CheckList items={items} isCompleted={true} onToggleComplete={handleToggleComplete}/>
             </div>
+            </div>
+        </div>
     );
 };
 
