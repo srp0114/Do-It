@@ -1,8 +1,8 @@
 .checklists {
     display: flex;
     flex-direction: column;
-    gap: 16px;
     width: 100%;
+    gap:35px;
 }
 
 @media (min-width: 745px) {
@@ -12,8 +12,6 @@
     }
 }
 
-@media (max-width: 744px) {
-    .contentContainer {
-        padding: 0 5vw;
-    }
+.contentContainer {
+    padding: 0 3vw;
 }

@@ -3,13 +3,12 @@
     justify-content: center;
     gap: 15px;
     align-items: center;
-    margin: 20px 20px;
+    margin: 20px 0;
     flex-wrap: nowrap;
 }
 
 .inputParent {
     position: relative;
-    box-sizing: border-box;
     width: 996px;
     height: 52.5px;
 }
@@ -43,4 +42,16 @@
     background-color: var(--slate-900);
     z-index: -1;
     box-sizing: border-box;
+}
+
+@media(max-width: 744px) {
+    .inputParent {
+        max-width: 518px;
+    }
+}
+@media (max-width: 375px) {
+    .inputParent {
+        max-width: 280px;
+        
+    }
 }

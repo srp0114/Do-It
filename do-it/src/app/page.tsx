@@ -56,10 +56,12 @@ const Home: React.FC = () => {
     return (
           <div>
             <GNB />
+            <div className={styles.contentContainer} >
                 <TodoInput tenantId={tenantId} onAddItem={handleAddItem} />
                 <div className={styles.checklists}>
-                    <CheckList items={items} />
-                    <CheckList items={items} />
+                    <CheckList items={items} isCompleted={false} />
+                    <CheckList items={items} isCompleted={true}/>
+                </div>
                 </div>
             </div>
     );
