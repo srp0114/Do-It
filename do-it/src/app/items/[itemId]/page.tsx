@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import styles from '@/app/items/[itemId]/ItemDetail.module.css';
+import Image from 'next/image';
 
 interface ItemDetailProps {
     params: { itemId: string };
@@ -57,7 +59,17 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
 
     return (
         <div>
-            
+            <div key={item.id} className={`${styles.detailContainer} ${item.isCompleted ? styles.completed : styles.notDone}`}>
+                <Image 
+                    width={32} 
+                    height={32} 
+                    src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} 
+                    alt={item.isCompleted ? "Checked" : "Check"} 
+                    className={styles.icon}
+                />
+                <div className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`}>{item.name}</div>
+            </div>
+
         </div>
     );
 };
