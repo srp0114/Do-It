@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import GNB from '@/app/components/GNB';
 import TodoInput from '@/app/components/TodoInput';
 import CheckList from '@/app/components/CheckList';
 import { TodoItem } from '@/app/components/types'; // 인터페이스 임포트
@@ -19,7 +18,6 @@ const Home: React.FC = () => {
         setItems((prevItems) => [...prevItems, item]);
     };
 
-
     useEffect(() => {
         const storedTenantId = localStorage.getItem('tenantId');
         if (storedTenantId) {
@@ -30,6 +28,7 @@ const Home: React.FC = () => {
             setTenantId(newTenantId);
         }
     }, []);
+
     useEffect(() => {
         const fetchItems = async () => {
             if (!tenantId) return;
@@ -50,7 +49,7 @@ const Home: React.FC = () => {
         fetchItems();
     }, [tenantId]); 
     
-    const handleToggleComplete = async (itemId: number) => {
+    const handleToggle = async (itemId: number) => {
         const itemIndex = items.findIndex(item => item.id === itemId);
         const item = items[itemIndex];
 
@@ -78,12 +77,11 @@ const Home: React.FC = () => {
 
     return (
           <div>
-            <GNB />
             <div className={styles.contentContainer} >
             <TodoInput tenantId={tenantId} onAddItem={handleAddItem} />
             <div className={styles.checklists}>
-                <CheckList items={items} isCompleted={false} onToggleComplete={handleToggleComplete} />
-                <CheckList items={items} isCompleted={true} onToggleComplete={handleToggleComplete}/>
+                <CheckList items={items} isCompleted={false} onToggle={handleToggle} />
+                <CheckList items={items} isCompleted={true} onToggle={handleToggle}/>
             </div>
             </div>
         </div>

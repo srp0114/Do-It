@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import styles from '@/app/components/CheckList.module.css';
 import { CheckListProps } from '@/app/components/types';
@@ -13,10 +14,15 @@ interface Item {
 interface ExtendedCheckListProps extends CheckListProps {
     isCompleted: boolean;
     items: Item[];
-    onToggleComplete: (itemId: number) => void;
+    onToggle: (itemId: number) => void;
 }
 
-const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onToggleComplete }) => {
+const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onToggle }) => {
+    const router = useRouter();
+    const handleClick = (itemId: number) => {
+        router.push(`/items/${itemId}`);
+    };
+    
     // 필터링된 항목 가져오기
     const filteredItems = items.filter(item => item.isCompleted === isCompleted);
     const title = isCompleted ? "done" : "todo";
@@ -42,13 +48,14 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onTog
                     </div>
                 ) : (
                     filteredItems.map((item) => (
-                        <div key={item.id} className={`${styles.itemContainer} ${item.isCompleted ? styles.completed : styles.notDone}`} onClick={() => onToggleComplete(item.id)}>
+                        <div key={item.id} className={`${styles.itemContainer} ${item.isCompleted ? styles.completed : styles.notDone}`} onClick={() => handleClick(item.id)}>
                             <Image 
                                 width={32} 
                                 height={32} 
                                 src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} 
                                 alt={item.isCompleted ? "Checked" : "Check"} 
                                 className={styles.icon}
+                                onClick={() => onToggle(item.id)}
                             />
                             <div className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`}>{item.name}</div>
                         </div>
