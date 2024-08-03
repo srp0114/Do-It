@@ -55,7 +55,10 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onTog
                                 src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} 
                                 alt={item.isCompleted ? "Checked" : "Check"} 
                                 className={styles.icon}
-                                onClick={() => onToggle(item.id)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onToggle(item.id)
+                                }}
                             />
                             <div className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`}>{item.name}</div>
                         </div>
