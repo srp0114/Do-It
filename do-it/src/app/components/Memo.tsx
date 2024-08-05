@@ -1,16 +1,32 @@
-import Image from "next/image";
-import styles from "@/app/components/Memo.module.css";
-const memo = () => {
+import React, { useState } from 'react';
+import styles from '@/app/components/Memo.module.css';
+
+interface MemoProps {
+    initialMemo: string;
+    onMemoChange: (newMemo: string) => void;
+}
+
+const Memo: React.FC<MemoProps> = ({ initialMemo, onMemoChange }) => {
+    const [memo, setMemo] = useState<string>(initialMemo || '');
+
+    const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const newMemo = e.target.value;
+        setMemo(newMemo);
+        onMemoChange(newMemo);
+    };
+
     return (
         <div className={styles.memoContainer}>
             <p className={styles.title}>Memo</p>
             <div className={styles.textContainer}>
-                <p className={styles.text}>
-               내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내부 스크롤이 이루어집니다. 내용이 최대로 늘어날 때 다음과 같이 보이며 내
-                </p>
+                <textarea 
+                    value={memo}
+                    onChange={handleMemoChange}
+                    className={styles.text}
+                />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default memo;
+export default Memo;

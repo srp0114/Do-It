@@ -1,15 +1,17 @@
 import React, { useState, useRef } from 'react';
 import styles from './TodoInput.module.css';
-import InputButton from '@/app/components/InputButton';
+import Button from '@/app/components/Button';
 import { TodoInputProps, TodoItem } from '@/app/components/types';
+import PlusIcon from './PlusIcon';
+import Image from 'next/image';
 
 const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
     const [name, setName] = useState<string>('');
     const [response, setResponse] = useState<TodoItem | null>(null);
-    const enterPressedRef = useRef<boolean>(false); 
+    const enterPressedRef = useRef<boolean>(false);
 
     const handleSubmit = async () => {
-        if (!name.trim()) return; 
+        if (!name.trim()) return;
 
         try {
             const url = `https://assignment-todolist-api.vercel.app/api/${tenantId}/items`;
@@ -36,35 +38,32 @@ const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
         }
     };
 
-    // Enter 키 입력 시 기본 동작 방지 및 중복 제출 방지
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); 
-
-            if (!enterPressedRef.current) {
-                enterPressedRef.current = true; 
-                setTimeout(() => {
-                    enterPressedRef.current = false;
-                }, 500);
-            }
+            e.preventDefault();
+            handleSubmit();
         }
     };
 
     return (
-        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+        <form className={styles.form} onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
             <div className={styles.inputParent}>
                 <input
                     type="text"
                     className={styles.input}
                     placeholder="할 일을 입력하세요"
                     onChange={(e) => setName(e.target.value)}
-                    onKeyDown={handleKeyDown} 
+                    onKeyDown={handleKeyDown}
                     value={name}
                 />
                 <div className={styles.inputChild} />
             </div>
-            <InputButton onClick={handleSubmit} /> 
-            {response && <div>Response: {JSON.stringify(response)}</div>}
+            <Button
+                onClick={handleSubmit}
+                text="추가하기"
+                Icon={name.trim() ? <Image src="/ic/plus.svg" alt="plus" width={16} height={16} /> : <PlusIcon />}
+                variant={name.trim() ? 'addActive' : 'add'}
+            />
         </form>
     );
 };
