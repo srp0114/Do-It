@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from '@/app/items/[itemId]/ItemDetail.module.css';
 import Image from 'next/image';
-
+import Img from '@/app/components/Img'
+import Memo from '@/app/components/Memo'
 interface ItemDetailProps {
     params: { itemId: string };
 }
@@ -69,7 +70,11 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
                 />
                 <div className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`}>{item.name}</div>
             </div>
-
+            <div className={styles.container}>
+                <Img/>
+                <Memo/>
+            </div>
+            
         </div>
     );
 };

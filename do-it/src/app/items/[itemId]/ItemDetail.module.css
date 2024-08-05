@@ -20,10 +20,21 @@
     background-color: white;
 }
 
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
 
 @media (max-width: 1920px) {
     .detailContainer {
         max-width: 996px;
+    }
+    .container {
+        flex-direction: row;
     }
 }
 
@@ -31,10 +42,16 @@
     .detailContainer {
         max-width: 696px;
     }
+    .container {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 375px) {
     .detailContainer {
         max-width: 343px;
+    }
+    .container {
+        flex-direction: column;
     }
 }

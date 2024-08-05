@@ -13,7 +13,7 @@
 }
 
 @font-face {
-  font-family: 'NanumSquare';
+  font-family: 'NanumSquareR';
   src: url('./fonts/NanumSquareR.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
@@ -27,7 +27,8 @@
   --slate-300: #CBD5E1;
   --slate-200: #E2E8F0;
   --slate-100: #F1F5F9;
-
+  --slate-50: #F8FAFC;
+  
   --violet-600: #7C3AED;
   --violet-100: #EDE9FE;
 
@@ -35,7 +36,7 @@
   --lime-300: #BEF264;
 
   --amber-800: #92400E;
-
+  --amber-200:#FDE68A;
   --font-size-20px: 20px;
   --font-size-18px: 18px;
   --font-size-16px: 16px;
@@ -44,14 +45,13 @@
   --font-weight-800: 800;
   --font-weight-400: 400;
   --font-family-nanum: 'NanumSquare';
+  --font-family-nanumR: 'NanumSquareR';
+}
+
+* {
+  font-family: var(--font-family-nanum);  
 }
 
 body {
-  font-family: 'Nanum Square', sans-serif;
-  color: var(--slate-900);
-  background-color: var(--slate-100);
-}
-
-.text{
-    font-family: 'Nanum Square', sans-serif;
+  padding : 0 3vw;
 }

@@ -76,15 +76,13 @@ const Home: React.FC = () => {
     };
 
     return (
-          <div>
-            <div className={styles.contentContainer} >
-            <TodoInput tenantId={tenantId} onAddItem={handleAddItem} />
-            <div className={styles.checklists}>
-                <CheckList items={items} isCompleted={false} onToggle={handleToggle} />
-                <CheckList items={items} isCompleted={true} onToggle={handleToggle}/>
+            <div >
+                <TodoInput tenantId={tenantId} onAddItem={handleAddItem} />
+                <div className={styles.checklists}>
+                    <CheckList items={items} isCompleted={false} onToggle={handleToggle} />
+                    <CheckList items={items} isCompleted={true} onToggle={handleToggle}/>
+                </div>
             </div>
-            </div>
-        </div>
     );
 };
 
