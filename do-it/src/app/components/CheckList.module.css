@@ -7,12 +7,10 @@
     width: 100%;
 }
 
-
 .title {
     gap:10px;
     align-self: flex-start;
 }
-
 
 .itemsContainer {
     display: flex;
@@ -31,7 +29,7 @@
 
 .completed {
     background-color: var(--violet-100);
-        text-decoration: line-through;
+    text-decoration: line-through;
 }
 
 .notDone {
@@ -51,6 +49,10 @@
     font-size: var(--font-size-16px);
     font-weight: var(--font-weight-400);
     color: var(--slate-800);
+    background-color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .emptyState {
@@ -67,7 +69,6 @@
     justify-content: center;
     margin:0;
 }
-
 
 
 @media (max-width: 745px) {
