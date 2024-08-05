@@ -54,7 +54,8 @@ const Img: React.FC<ItemImage> = ({ imageUrl, tenantId, onImageUrlChange }) => {
                 src={imageUrl}
                 alt="Uploaded Image"
                 fill
-                className={styles.image}         
+                className={styles.image}     
+                sizes="auto"    
              />
             ) : (
                 <Image
