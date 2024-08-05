@@ -21,6 +21,7 @@
 
 :root {
   --slate-900: #0F172A;
+  --slate-900-transparent: #0F172A80;
   --slate-800: #1E293B;
   --slate-500: #647488;
   --slate-400: #94A3B8;
@@ -37,6 +38,8 @@
 
   --amber-800: #92400E;
   --amber-200:#FDE68A;
+
+        /* 투명도가 적용된 색상 사용 */
   --font-size-20px: 20px;
   --font-size-18px: 18px;
   --font-size-16px: 16px;

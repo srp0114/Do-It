@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.addBtn {
+.addImg, .editImg {
     position: absolute;
     bottom: 15px;
     right: 15px;
@@ -24,6 +24,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.editImg {
+    border: 2px solid var(--slate-900);
+    background-color: var(--slate-900-transparent)
 }
 
 @media (max-width: 1920px) {

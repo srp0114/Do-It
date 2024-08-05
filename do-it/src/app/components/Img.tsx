@@ -64,7 +64,7 @@ const Img: React.FC<ItemImage> = ({ imageUrl, tenantId, onImageUrlChange }) => {
                 height={64}
                 />
             )}
-            <button className={styles.addBtn} type="button" onClick={handleButtonClick} disabled={uploading}>
+            <button className={imageUrl ? styles.editImg : styles.addImg} type="button" onClick={handleButtonClick} disabled={uploading}>
                 <Image
                     alt={imageUrl ? 'editImage' : 'addImage'}
                     src={imageUrl ? '/ic/edit.svg' : '/ic/largePlus.svg'}
