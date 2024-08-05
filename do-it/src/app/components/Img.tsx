@@ -48,14 +48,14 @@ const Img: React.FC<ItemImage> = ({ imageUrl, tenantId, onImageUrlChange }) => {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${imageUrl ? styles.imgContainer : ''}`}>
              {imageUrl ? (
                 <Image
                 src={imageUrl}
                 alt="Uploaded Image"
-                layout="fill"
-                sizes="100vw" 
-                />
+                fill
+                className={styles.image}         
+             />
             ) : (
                 <Image
                 src="/ic/img.svg"

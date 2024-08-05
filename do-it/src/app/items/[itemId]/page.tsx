@@ -172,7 +172,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
           className={styles.icon}
           onClick={handleToggle}
         />
-         <input size={item.name.length} type="text" value={item.name} className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`} onChange={handleNameChange}/>
+         <input size={item.name.length *2} type="text" value={item.name} className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`} onChange={handleNameChange}/>
         </div>
         <div className={styles.container}>
         <Img imageUrl={item.imageUrl} tenantId={tenantId!} onImageUrlChange={handleImageUrlChange}/>
