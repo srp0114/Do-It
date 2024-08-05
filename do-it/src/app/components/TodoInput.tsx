@@ -8,6 +8,7 @@ import Image from 'next/image';
 const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
     const [name, setName] = useState<string>('');
     const [response, setResponse] = useState<TodoItem | null>(null);
+    const [isComposing, setIsComposing] = useState<boolean>(false);
     const enterPressedRef = useRef<boolean>(false);
 
     const handleSubmit = async () => {
@@ -39,7 +40,7 @@ const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !isComposing) {
             e.preventDefault();
             handleSubmit();
         }
@@ -54,6 +55,8 @@ const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
                     placeholder="할 일을 입력하세요"
                     onChange={(e) => setName(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    onCompositionStart={() => setIsComposing(true)}
+                    onCompositionEnd={() => setIsComposing(false)}
                     value={name}
                 />
                 <div className={styles.inputChild} />
