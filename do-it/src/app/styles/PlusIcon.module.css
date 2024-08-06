@@ -8,3 +8,10 @@
     stroke-width: 2;
     stroke-linecap: round;
 }
+
+@media (max-width: 375px) {
+    .icon {
+        width: 16px;
+        height: 16px;
+    }
+}
