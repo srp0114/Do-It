@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, useRef } from 'react';
 import Image from 'next/image';
 import styles from '@/app/styles/Img.module.css'
+import { uploadImage } from '../api/items';
 
 interface ItemImage {
     imageUrl: string | null;
@@ -17,24 +18,11 @@ const Img: React.FC<ItemImage> = ({ imageUrl, tenantId, onImageUrlChange }) => {
             const selectedImage = e.target.files[0];
             setUploading(true);
 
-            const formData = new FormData();
-            formData.append('image', selectedImage);
-
             try {
-                const response = await fetch(`https://assignment-todolist-api.vercel.app/api/${tenantId}/images/upload`, {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                if (!response.ok) {
-                    throw new Error('Image upload failed');
-                }
-
-                const data = await response.json();
-                onImageUrlChange(data.url);
-                console.log(data.url)
+                const imageUrl = await uploadImage(tenantId, selectedImage);
+                onImageUrlChange(imageUrl);
             } catch (error) {
-                console.error('Error uploading image:', error);
+                alert('Error uploading image');
             } finally {
                 setUploading(false);
             }
@@ -50,37 +38,14 @@ const Img: React.FC<ItemImage> = ({ imageUrl, tenantId, onImageUrlChange }) => {
     return (
         <div className={`${styles.container} ${imageUrl ? styles.imgContainer : ''}`}>
              {imageUrl ? (
-                <Image
-                src={imageUrl}
-                alt="Uploaded Image"
-                fill
-                className={styles.image}     
-                sizes="auto"    
-             />
+                <Image src={imageUrl} alt="Uploaded Image" fill className={styles.image} sizes="auto"/>
             ) : (
-                <Image
-                src="/ic/img.svg"
-                alt="Placeholder Image"
-                width={64}
-                height={64}
-                />
+                <Image src="/ic/img.svg" alt="Placeholder Image" width={64} height={64} />
             )}
             <button className={imageUrl ? styles.editImg : styles.addImg} type="button" onClick={handleButtonClick} disabled={uploading}>
-                <Image
-                    alt={imageUrl ? 'editImage' : 'addImage'}
-                    src={imageUrl ? '/ic/edit.svg' : '/ic/largePlus.svg'}
-                    width={24}
-                    height={24}
-                />
+                <Image alt={imageUrl ? 'editImage' : 'addImage'} src={imageUrl ? '/ic/edit.svg' : '/ic/largePlus.svg'} width={24} height={24}/>
             </button>
-            <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ display: 'none' }}
-                id="fileInput"
-            />
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className={styles.fileInput} id="fileInput" />
         </div>
     );
 };

@@ -2,22 +2,15 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import styles from '@/app/styles/TodoList.module.css'
-import { CheckListProps } from '@/app/types/types';
+import { Item } from '@/app/types/types';
 
-interface Item {
-    id: number;
-    name: string;
-    isCompleted: boolean;
-    tenantId: string;
-}
-
-interface ExtendedCheckListProps extends CheckListProps {
+interface TodoListProps {
     isCompleted: boolean;
     items: Item[];
     onToggle: (itemId: number) => void;
 }
 
-const TodoList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onToggle }) => {
+const TodoList: React.FC<TodoListProps> = ({ items, isCompleted, onToggle }) => {
     const router = useRouter();
     const handleClick = (itemId: number) => {
         router.push(`/items/${itemId}`);

@@ -1,15 +1,9 @@
-export interface TodoItem {
+export interface Item {
     id: number;
+    tenantId: string;
     name: string;
-    isCompleted: boolean;
-    tenantId: string;
+    memo: string | null;
+    imageUrl: string | null;
+    isCompleted: boolean ;
 }
 
-export interface TodoInputProps {
-    tenantId: string;
-    onAddItem: (item: TodoItem) => void;
-}
-
-export interface CheckListProps {
-    items: TodoItem[];
-}

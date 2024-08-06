@@ -2,40 +2,30 @@ import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import styles from '@/app/styles/Input.module.css'
 import Button from '@/app/components/Button';
-import { TodoInputProps, TodoItem } from '@/app/types/types';
-import PlusIcon from './PlusIcon';
+import { Item } from '@/app/types/types';
+import PlusIcon from '@/app/components/PlusIcon';
+import { createItem } from '@/app/api/items';
+
+interface TodoInputProps {
+    tenantId: string;
+    onAddItem: (item: Item) => void;
+}
 
 const Input: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
     const [name, setName] = useState<string>('');
-    const [response, setResponse] = useState<TodoItem | null>(null);
+    const [response, setResponse] = useState<Item | null>(null);
     const [isComposing, setIsComposing] = useState<boolean>(false);
-    const enterPressedRef = useRef<boolean>(false);
 
     const handleSubmit = async () => {
-        if (!name.trim()) return;
+        if (!name.trim() || !tenantId) return; 
 
         try {
-            const url = `https://assignment-todolist-api.vercel.app/api/${tenantId}/items`;
-
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: name }),
-            });
-
-            if (!res.ok) {
-                const errorText = await res.text();
-                throw new Error(`Network response was not ok: ${errorText}`);
-            }
-
-            const data = await res.json();
-            setResponse(data);
+            const newItem = await createItem(tenantId, name);
+            setResponse(newItem);
             setName('');
-            onAddItem(data);
+            onAddItem(newItem);
         } catch (error) {
-            console.error('Fetch error:', error);
+            alert('Failed to create item. Please try again.');
         }
     };
 

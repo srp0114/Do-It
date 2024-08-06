@@ -30,6 +30,7 @@
 .input:focus {
     outline: none;
     cursor: text;
+    color: var(--slate-900);
 }
 
 .inputChild {

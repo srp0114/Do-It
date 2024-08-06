@@ -1,130 +1,153 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { Item } from '@/app/types/types';
+const API_BASE_URL = 'https://assignment-todolist-api.vercel.app/api';
+const PAGE_SIZE = 12;
 
-interface PostTodo {
-  name: string;
+// 항목 생성
+export async function createItem(
+  tenantId: string,
+  name: string
+): Promise<Item> {
+  if (!tenantId || !name.trim()) {
+    throw new Error('Tenant ID and item name are required');
+  }
+  try {
+    const response = await fetch(`${API_BASE_URL}/${tenantId}/items`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create item');
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
 }
 
-interface PostResponse {
-  isCompleted: boolean;
-  imageUrl: string | null;
-  memo: string | null;
-  name: string;
+// 항목 조회
+export async function getItems({
+  pageParam = 1,
+  tenantId,
+}: {
+  pageParam?: number;
   tenantId: string;
-  id: number;
+}): Promise<any> {
+  if (!tenantId) {
+    throw new Error('Tenant ID is missing');
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/${tenantId}/items?page=${pageParam}&pageSize=${PAGE_SIZE}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw error; 
+  }
 }
 
-interface GetResponse {
-  id: number;
-  name: string;
-  isCompleted: boolean;
-  imageUrl: string | null;
-  memo: string | null;
-  tenantId: string;
+// 항목 상세 정보 조회
+export async function getDetailItem(tenantId: string, itemId: string): Promise<Item> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${tenantId}/items/${itemId}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data: Item = await response.json();
+    return data;
+  } catch (error) {
+    throw error;
+  }
 }
 
-interface PatchTodo {
-  isCompleted: boolean;
+// 항목 수정
+export async function updateItem(
+  tenantId: string,
+  itemId: string,
+  item: Partial<Item>
+): Promise<Item> {
+  if (!tenantId || !itemId) {
+    throw new Error('Tenant ID and Item ID are required');
+  }
+
+ const requestBody: Partial<Item> = {
+    ...(item.name !== undefined && item.name !== '' && { name: item.name }),
+    ...(item.memo !== undefined && item.memo !== null && { memo: item.memo }),
+    ...(item.imageUrl !== undefined && item.imageUrl !== null && { imageUrl: item.imageUrl }),
+    ...(item.isCompleted !== undefined && { isCompleted: item.isCompleted }),
+  };
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/${tenantId}/items/${itemId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to update item: ${errorText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating item:', error);
+    throw error;
+  }
 }
 
-const itemsStore: { [key: string]: { id: number; name: string; isCompleted: boolean; imageUrl: string | null; memo: string | null; tenantId: string }[] } = {};
+//항목 삭제
+export async function deleteItem(
+  tenantId: string,
+  itemId: string
+): Promise<void> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${tenantId}/items/${itemId}`, {
+      method: 'DELETE',
+    });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<PostResponse | GetResponse[] | { error: string }>
-) {
-  const {
-    query: { tenantId, itemId },
-    method,
-    body,
-  } = req;
+    if (!response.ok) {
+      throw new Error('Failed to delete item');
+    }
 
-  switch (method) {
-    case 'POST':
-      const { name }: PostTodo = body;
+  } catch (error) {
+    throw error;
+  }
+}
 
-      if (!name) {
-        return res.status(400).json({ error: 'Name is required' });
-      }
+// 이미지 업로드
+export async function uploadImage(
+  tenantId: string,
+  imageFile: File
+): Promise<string> {
+  if (!tenantId || !imageFile) {
+    throw new Error('Tenant ID and image file are required');
+  }
 
-      const newItem = {
-        id: Date.now(),
-        name,
-        isCompleted: false,
-        imageUrl: null,
-        memo: null,
-        tenantId: tenantId as string
-      };
+  const formData = new FormData();
+  formData.append('image', imageFile);
 
-      if (!itemsStore[tenantId as string]) {
-        itemsStore[tenantId as string] = [];
-      }
-      itemsStore[tenantId as string].push(newItem);
+  try {
+    const response = await fetch(`${API_BASE_URL}/${tenantId}/images/upload`, {
+      method: 'POST',
+      body: formData,
+    });
 
-      res.status(200).json({
-        isCompleted: newItem.isCompleted,
-        imageUrl: newItem.imageUrl,
-        memo: newItem.memo,
-        name: newItem.name,
-        tenantId: newItem.tenantId,
-        id: newItem.id,
-      });
-      break;
+    if (!response.ok) {
+      throw new Error('Image upload failed');
+    }
 
-    case 'GET':
-      if (!tenantId) {
-        return res.status(400).json({ error: 'Tenant ID is required' });
-      }
-
-      // Get all items for the tenant
-      const items = itemsStore[tenantId as string] || [];
-      res.status(200).json(items.map(item => ({
-        id: item.id,
-        name: item.name,
-        isCompleted: item.isCompleted,
-        imageUrl: item.imageUrl,
-        memo: item.memo,
-        tenantId: item.tenantId
-      })));
-      break;
-
-    case 'PATCH':
-      const { isCompleted }: PatchTodo = body;
-
-      if (typeof isCompleted !== 'boolean') {
-        return res.status(400).json({ error: 'isCompleted must be a boolean' });
-      }
-
-      if (!tenantId || !itemId) {
-        return res.status(400).json({ error: 'Tenant ID and Item ID are required' });
-      }
-
-      const tenantItems = itemsStore[tenantId as string];
-      if (!tenantItems) {
-        return res.status(404).json({ error: 'Tenant not found' });
-      }
-
-      const itemIndex = tenantItems.findIndex(item => item.id === Number(itemId));
-      if (itemIndex === -1) {
-        return res.status(404).json({ error: 'Item not found' });
-      }
-
-      // Update the item
-      tenantItems[itemIndex].isCompleted = isCompleted;
-
-      // Return the updated item in PostResponse format
-      res.status(200).json({
-        isCompleted: tenantItems[itemIndex].isCompleted,
-        imageUrl: tenantItems[itemIndex].imageUrl,
-        memo: tenantItems[itemIndex].memo,
-        name: tenantItems[itemIndex].name,
-        tenantId: tenantItems[itemIndex].tenantId,
-        id: tenantItems[itemIndex].id,
-      });
-      break;
-
-    default:
-      res.setHeader('Allow', ['POST', 'GET', 'PATCH']);
-      res.status(405).end(`Method ${method} Not Allowed`);
-      break;
+    const data = await response.json();
+    return data.url;
+  } catch (error) {
+    throw error;
   }
 }

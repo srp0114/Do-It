@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from '@/app/styles/Memo.module.css'
 
 interface MemoProps {
-    initialMemo: string;
+    initialMemo: string | null;
     onMemoChange: (newMemo: string) => void;
 }
 

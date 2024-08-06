@@ -4,23 +4,13 @@ import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useState, useEffect, useCallback } from 'react';
 import Input from '@/app/components/Input';
 import TodoList from '@/app/components/TodoList';
-import { TodoItem } from '@/app/types/types';
+import { Item } from '@/app/types/types';
+import { getItems, updateItem } from '@/app/api/items';
 import styles from '@/app/styles/Home.module.css'
-
-const PAGE_SIZE = 12;
-
-const fetchItems = async ({ pageParam = 1, tenantId }: { pageParam?: number; tenantId: string }) => {
-    if (!tenantId) {
-        throw new Error('Tenant ID is missing');
-    }
-    const response = await fetch(`https://assignment-todolist-api.vercel.app/api/${tenantId}/items?page=${pageParam}&pageSize=${PAGE_SIZE}`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-};
 
 const Home: React.FC = () => {
     const [tenantId, setTenantId] = useState<string>('');
-    const [localItems, setLocalItems] = useState<TodoItem[]>([]); 
+    const [localItems, setLocalItems] = useState<Item[]>([]); 
 
     useEffect(() => {
         const storedTenantId = localStorage.getItem('tenantId');
@@ -33,8 +23,6 @@ const Home: React.FC = () => {
         }
     }, []);
 
-    const queryClient = useQueryClient();
-
     const {
         data,
         fetchNextPage,
@@ -42,13 +30,13 @@ const Home: React.FC = () => {
         isFetchingNextPage,
         isLoading,
         error,
-    } = useInfiniteQuery<TodoItem[], Error>(
+    } = useInfiniteQuery<Item[], Error>(
         ['items', tenantId],
-        ({ pageParam = 1 }) => fetchItems({ pageParam, tenantId }),
+        ({ pageParam = 1 }) => getItems({ pageParam, tenantId }),
         {
-            enabled: !!tenantId, // tenantId가 설정된 후에만 쿼리 실행
+            enabled: !!tenantId, 
             getNextPageParam: (lastPage, allPages) => {
-                return lastPage.length === PAGE_SIZE ? allPages.length + 1 : undefined;
+                return lastPage.length === 12 ? allPages.length + 1 : undefined;
             },
             onSuccess: (data) => {
                 setLocalItems(data.pages.flat());
@@ -62,7 +50,6 @@ const Home: React.FC = () => {
             document.documentElement.scrollHeight
         ) {
             if (hasNextPage && !isFetchingNextPage) {
-                console.log('Fetching next page...');
                 fetchNextPage();
             }
         }
@@ -81,33 +68,27 @@ const Home: React.FC = () => {
     const doneItems = localItems.filter(item => item.isCompleted);
 
     const handleToggle = async (itemId: number) => {
-        const itemIndex = localItems.findIndex(item => item.id === itemId);
-        const item = localItems[itemIndex];
-        if (!item) return;
-
         try {
-            const response = await fetch(`https://assignment-todolist-api.vercel.app/api/${tenantId}/items/${item.id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ isCompleted: !item.isCompleted }),
+            const itemToUpdate = localItems.find(item => item.id === itemId);
+            if (!itemToUpdate) return;
+
+            const updatedItem = await updateItem(tenantId, itemId.toString(), {
+                isCompleted: !itemToUpdate.isCompleted
             });
 
-            if (response.ok) {
-                const updatedItem = await response.json();
-                const updatedItems = [...localItems];
-                updatedItems[itemIndex] = updatedItem;
-                setLocalItems(updatedItems);
-            } else {
-                console.error('Failed to update item');
-            }
+            setLocalItems(prevItems =>
+            prevItems.map(item =>
+                item.id === itemId
+                ? updatedItem 
+                : item
+            )
+            );
         } catch (error) {
-            console.error('An error occurred:', error);
+            alert('An error occurred');
         }
     };
 
-    const handleAddItem = (item: TodoItem) => {
+    const handleAddItem = (item: Item) => {
         setLocalItems((prevItems) => [...prevItems, item]);
     };
 
@@ -130,4 +111,5 @@ function debounce(func: Function, wait: number) {
         timeout = setTimeout(() => func(...args), wait);
     };
 }
+
 export default Home;

@@ -6,28 +6,45 @@ import Img from '@/app/components/Img';
 import Memo from '@/app/components/Memo';
 import Button from '@/app/components/Button';
 import styles from '@/app/styles/Item.module.css'
+import { Item } from '@/app/types/types';
+import { getDetailItem, updateItem, deleteItem } from '@/app/api/items';
 
-interface ItemDetailProps {
+interface DetailProps {
   params: { itemId: string };
 }
 
-interface Item {
-  id: number;
-  name: string;
-  memo: string | "";
-  isCompleted: boolean;
-  imageUrl: string | "";
-  tenantId: string;
-}
-
-const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
+const Detail: React.FC<DetailProps> = ({ params }) => {
     const [tenantId, setTenantId] = useState<string | null>(null);
     const [item, setItem] = useState<Item | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [hasChanged, setHasChanged] = useState<boolean>(false);
     const router = useRouter();
-
     const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+      const storedTenantId = localStorage.getItem('tenantId');
+      setTenantId(storedTenantId);
+    }, []);
+
+    useEffect(() => {
+      const fetchItemData = async () => {
+        if (!tenantId) return;
+        try {
+            setLoading(true);
+            const data = await getDetailItem(tenantId, params.itemId);
+            if (data) {
+                setItem(data);
+            } 
+        } catch (error) {
+            alert('Error fetching item');
+            router.push('/');
+        } finally {
+            setLoading(false);
+        }
+      };
+
+      fetchItemData();
+    }, [params.itemId, router, tenantId]);
 
     useEffect(() => {
         const input = inputRef.current;
@@ -44,131 +61,68 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
         }
     }, [item?.name]);
 
+    const updateItemState = (updates: Partial<Item>) => {
+        if (item) {
+            setItem(prevItem => ({
+                ...prevItem!,
+                ...updates
+            }));
+            setHasChanged(true);
+        }
+    };
+
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          if (item) {
-              const newName = e.target.value;
-              setItem(prevItem => ({
-                  ...prevItem!,
-                  name: newName
-              }));
-              setHasChanged(true);
-          }
-      };
+        updateItemState({ name: e.target.value });
+    };
 
     const handleToggle = async () => {
-        if (!item) return;
-
-        const updatedItem = {
-            ...item,
-            isCompleted: !item.isCompleted
-        };
-
-        setItem(updatedItem);
-        setHasChanged(true);
-    }
+        if (item) {
+          const updatedItem = {
+              ...item,
+              isCompleted: !item.isCompleted
+          };
+          updateItemState(updatedItem);
+        }
+    };
 
     const handleMemoChange = (newMemo: string) => {
-        if (item) {
-            setItem(prevItem => ({
-                ...prevItem!,
-                memo: newMemo
-            }));
-            setHasChanged(true);
-        }
+        updateItemState({ memo: newMemo });
     };
 
-  const handleImageUrlChange = async (url: string) => {
-        if (item) {
-            setItem(prevItem => ({
-                ...prevItem!,
-                imageUrl: url
-            }));
-            setHasChanged(true);
-        }
-  }
+    const handleImageUrlChange = (url: string) => {
+        updateItemState({ imageUrl: url });
+    };
 
-  const handleEdit = async () => {
-    console.log(item)
-    if (item && tenantId) {
-        try {
-            const response = await fetch(`https://assignment-todolist-api.vercel.app/api/${tenantId}/items/${params.itemId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
+    
+    const handleEdit = async () => {
+        if (item && tenantId) {
+            try {
+                const body: Partial<Item> = {
                     name: item.name,
-                    memo: item.memo,
                     isCompleted: item.isCompleted,
-                    imageUrl: item.imageUrl,
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update item');
+                    memo: item.memo ?? null, 
+                    imageUrl: item.imageUrl ?? null,
+                };
+                const updatedItem = await updateItem(tenantId, params.itemId, body);
+                setItem(updatedItem);
+                router.push('/');  
+            } catch (error) {
+                alert('Failed to update item. Please try again.');
             }
-
-            const updatedItem: Item = await response.json();
-            setItem(updatedItem);
-            router.push('/');  
-
-        } catch (error) {
-            console.error('Error updating item:', error);
-            alert('Failed to update item. Please try again.');
         }
-    }
-};
+    };
 
   const handleDelete = async () => {
-    if (item && tenantId) {
-        try {
-            const response = await fetch(`https://assignment-todolist-api.vercel.app/api/${tenantId}/items/${params.itemId}`, {
-            method: 'DELETE',
-            });
-
-            if (!response.ok) {
-            throw new Error('Failed to delete item');
+        if (item && tenantId) {
+            try {
+                await deleteItem(tenantId, params.itemId);
+                router.push('/');
+            } catch (error) {
+                alert('Failed to delete item. Please try again.');
             }
-            router.push('/');  
-
-        } catch (error) {
-            console.error('Error deleting item:', error);
-            alert('Failed to delete item. Please try again.');
         }
     }
-  }
-
-  useEffect(() => {
-    const storedTenantId = localStorage.getItem('tenantId');
-    setTenantId(storedTenantId);
-  }, []);
-
-  useEffect(() => {
-    const fetchItem = async () => {
-      if (!tenantId) return;
-
-      try {
-        setLoading(true);
-        const response = await fetch(`https://assignment-todolist-api.vercel.app/api/${tenantId}/items/${params.itemId}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data: Item | null = await response.json();
-        if (data) {
-          setItem(data);
-        } else {
-          console.error('Fetched item is null');
-        }
-      } catch (error) {
-        console.error('Error fetching item:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchItem();
-  }, [params.itemId, tenantId]);
-
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -202,4 +156,4 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
   );
 };
 
-export default ItemDetail;
+export default Detail;

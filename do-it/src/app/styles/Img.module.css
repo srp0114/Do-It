@@ -21,6 +21,10 @@
     height: 100%;
 }
 
+.fileInput {
+    display: none;
+}
+
 .addImg, .editImg {
     position: absolute;
     bottom: 15px;
