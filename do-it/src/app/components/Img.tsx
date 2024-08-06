@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useRef } from 'react';
 import Image from 'next/image';
-import styles from '@/app/components/Img.module.css';
+import styles from '@/app/styles/Img.module.css'
 
 interface ItemImage {
     imageUrl: string | null;

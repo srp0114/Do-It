@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '@/app/components/Memo.module.css';
+import styles from '@/app/styles/Memo.module.css'
 
 interface MemoProps {
     initialMemo: string;

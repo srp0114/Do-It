@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
-import styles from '@/app/components/CheckList.module.css';
+import styles from '@/app/styles/TodoList.module.css'
 import { CheckListProps } from '@/app/components/types';
 
 interface Item {
@@ -17,7 +17,7 @@ interface ExtendedCheckListProps extends CheckListProps {
     onToggle: (itemId: number) => void;
 }
 
-const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onToggle }) => {
+const TodoList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onToggle }) => {
     const router = useRouter();
     const handleClick = (itemId: number) => {
         router.push(`/items/${itemId}`);
@@ -69,4 +69,4 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onTog
     );
 };
 
-export default CheckList;
+export default TodoList;

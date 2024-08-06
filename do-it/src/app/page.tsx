@@ -2,10 +2,10 @@
 
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useState, useEffect, useCallback } from 'react';
-import TodoInput from '@/app/components/TodoInput';
-import CheckList from '@/app/components/CheckList';
+import Input from '@/app/components/Input';
+import TodoList from '@/app/components/TodoList';
 import { TodoItem } from '@/app/components/types';
-import styles from './Home.module.css'; // CSS 모듈 import
+import styles from '@/app/styles/Home.module.css'
 
 const PAGE_SIZE = 12;
 
@@ -113,10 +113,10 @@ const Home: React.FC = () => {
 
     return (
         <div>
-            <TodoInput tenantId={tenantId} onAddItem={handleAddItem} />
+            <Input tenantId={tenantId} onAddItem={handleAddItem} />
             <div className={styles.checklists}>
-                <CheckList items={todoItems} isCompleted={false} onToggle={handleToggle} />
-                <CheckList items={doneItems} isCompleted={true} onToggle={handleToggle} />
+                <TodoList items={todoItems} isCompleted={false} onToggle={handleToggle} />
+                <TodoList items={doneItems} isCompleted={true} onToggle={handleToggle} />
             </div>
             {isFetchingNextPage && <div>Loading more items...</div>}
         </div>

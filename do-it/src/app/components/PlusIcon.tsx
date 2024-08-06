@@ -1,9 +1,8 @@
 import React from 'react';
-import styles from './Icon.module.css'; // CSS 모듈 파일 경로
+import styles from '@/app/styles/PlusIcon.module.css'
 
-// Props 타입 정의
 interface PlusIconProps {
-    className?: string; // className은 선택적 속성으로 string 타입
+    className?: string; 
 }
 
 const PlusIcon: React.FC<PlusIconProps> = ({ className, ...props }) => (
@@ -13,7 +12,7 @@ const PlusIcon: React.FC<PlusIconProps> = ({ className, ...props }) => (
         viewBox="0 0 16 16"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={`${styles.icon} ${className}`} // CSS 모듈 클래스와 추가 클래스를 적용
+        className={`${styles.icon} ${className}`} 
         {...props}
     >
         <path d="M2 8L14 8" className={styles.path} />

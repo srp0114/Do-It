@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
-import styles from './TodoInput.module.css';
+import Image from 'next/image';
+import styles from '@/app/styles/Input.module.css'
 import Button from '@/app/components/Button';
 import { TodoInputProps, TodoItem } from '@/app/components/types';
 import PlusIcon from './PlusIcon';
-import Image from 'next/image';
 
-const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
+const Input: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
     const [name, setName] = useState<string>('');
     const [response, setResponse] = useState<TodoItem | null>(null);
     const [isComposing, setIsComposing] = useState<boolean>(false);
@@ -71,4 +71,4 @@ const TodoInput: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
     );
 };
 
-export default TodoInput;
+export default Input;

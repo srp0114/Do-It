@@ -1,12 +1,11 @@
 'use client';
-
 import React, { useEffect, useState, useRef } from 'react';
-import styles from '@/app/items/[itemId]/ItemDetail.module.css';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Img from '@/app/components/Img';
 import Memo from '@/app/components/Memo';
 import Button from '@/app/components/Button';
-import { useRouter } from 'next/navigation';
+import styles from '@/app/styles/Item.module.css'
 
 interface ItemDetailProps {
   params: { itemId: string };
