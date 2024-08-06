@@ -1,0 +1,17 @@
+.checklists {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap:35px;
+}
+
+@media (min-width: 745px) {
+    .checklists {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+.contentContainer {
+    padding: 0 3vw;
+}

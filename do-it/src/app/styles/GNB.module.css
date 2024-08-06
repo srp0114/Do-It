@@ -1,0 +1,39 @@
+.nav {
+    border-bottom: 1px solid #E2E8F0;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: calc((100vw - 1200px) / 2);
+    padding-right: calc((100vw - 1200px) / 2);
+    box-sizing: border-box;
+}
+
+.logo {
+    width: 154px;
+    height: 40px;
+    background-image: url('/images/logo-large.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left center;
+    cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+    .nav {
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+}
+
+@media (max-width: 375px) {
+    .nav {
+        padding-left: 5vw;
+        padding-right: 5vw;
+    }
+
+    .logo {
+        background-image: url('/images/logo-small.svg');
+        width: 71px;
+    }
+}
