@@ -1,17 +1,17 @@
 'use client';
-
-import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useState, useEffect, useCallback } from 'react';
-import Input from '@/app/components/Input';
-import TodoList from '@/app/components/TodoList';
+import { useInfiniteQuery } from 'react-query';
 import { Item } from '@/app/types/types';
 import { getItems, updateItem } from '@/app/api/items';
-import styles from '@/app/styles/Home.module.css'
+import Input from '@/app/components/Input';
+import TodoList from '@/app/components/TodoList';
+import styles from '@/app/styles/Home.module.css';
 
 const Home: React.FC = () => {
     const [tenantId, setTenantId] = useState<string>('');
-    const [localItems, setLocalItems] = useState<Item[]>([]); 
+    const [localItems, setLocalItems] = useState<Item[]>([]);
 
+    // tenantId localStorage에서 생성/가져오기
     useEffect(() => {
         const storedTenantId = localStorage.getItem('tenantId');
         if (storedTenantId) {
@@ -23,6 +23,7 @@ const Home: React.FC = () => {
         }
     }, []);
 
+    // react-query를 사용해 아이템 목록을 가져옴
     const {
         data,
         fetchNextPage,
@@ -34,16 +35,21 @@ const Home: React.FC = () => {
         ['items', tenantId],
         ({ pageParam = 1 }) => getItems({ pageParam, tenantId }),
         {
-            enabled: !!tenantId, 
+            enabled: !!tenantId,
             getNextPageParam: (lastPage, allPages) => {
-                return lastPage.length === 12 ? allPages.length + 1 : undefined;
+                return lastPage.length > 0 ? allPages.length + 1 : undefined;
             },
             onSuccess: (data) => {
-                setLocalItems(data.pages.flat());
+                const newItems = data.pages.flat();
+                setLocalItems(prevItems => {
+                    const existingIds = new Set(prevItems.map(item => item.id));
+                    return [...prevItems, ...newItems.filter(item => !existingIds.has(item.id))];
+                });
             },
         }
     );
 
+    // 스크롤 이벤트 핸들러 - 하단에 도달시 다음 페이지 가져옴
     const handleScroll = useCallback(() => {
         if (
             window.innerHeight + document.documentElement.scrollTop + 100 >=
@@ -56,17 +62,14 @@ const Home: React.FC = () => {
     }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
     useEffect(() => {
-        const debouncedHandleScroll = debounce(handleScroll, 200);
-        window.addEventListener('scroll', debouncedHandleScroll);
-        return () => window.removeEventListener('scroll', debouncedHandleScroll);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, [handleScroll]);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-    const todoItems = localItems.filter(item => !item.isCompleted);
-    const doneItems = localItems.filter(item => item.isCompleted);
-
+    // 완료여부 변경 핸들러
     const handleToggle = async (itemId: number) => {
         try {
             const itemToUpdate = localItems.find(item => item.id === itemId);
@@ -77,7 +80,7 @@ const Home: React.FC = () => {
             }
 
             const updatedItem = await updateItem(tenantId, itemId.toString(), {
-                name: itemToUpdate.name, // name 필드를 함께 전달
+                name: itemToUpdate.name,
                 isCompleted: !itemToUpdate.isCompleted
             });
 
@@ -89,9 +92,13 @@ const Home: React.FC = () => {
         }
     };
 
+    // 아이템을 추가 핸들러
     const handleAddItem = (item: Item) => {
-        setLocalItems((prevItems) => [...prevItems, item]);
+        setLocalItems(prevItems => [item, ...prevItems]); // 추가된 아이템 목록의 맨 위에 추가
     };
+
+    const todoItems = localItems.filter(item => !item.isCompleted);
+    const doneItems = localItems.filter(item => item.isCompleted);
 
     return (
         <div>
@@ -104,13 +111,5 @@ const Home: React.FC = () => {
         </div>
     );
 };
-
-function debounce(func: Function, wait: number) {
-    let timeout: NodeJS.Timeout;
-    return (...args: any[]) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), wait);
-    };
-}
 
 export default Home;

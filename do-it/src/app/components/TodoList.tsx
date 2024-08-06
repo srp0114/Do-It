@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
-import styles from '@/app/styles/TodoList.module.css'
 import { Item } from '@/app/types/types';
+import styles from '@/app/styles/TodoList.module.css';
 
 interface TodoListProps {
     isCompleted: boolean;
@@ -12,6 +12,8 @@ interface TodoListProps {
 
 const TodoList: React.FC<TodoListProps> = ({ items, isCompleted, onToggle }) => {
     const router = useRouter();
+        
+    // 클릭 시 상세 페이지로 이동
     const handleClick = (itemId: number) => {
         router.push(`/items/${itemId}`);
     };
@@ -35,8 +37,14 @@ const TodoList: React.FC<TodoListProps> = ({ items, isCompleted, onToggle }) => 
             ) : (
                 filteredItems.map((item, index) => (
                     <div key={index} className={`${styles.itemContainer} ${item.isCompleted ? styles.completed : styles.notDone}`} onClick={() => handleClick(item.id)}>
-                    <Image width={32} height={32} src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} alt={item.isCompleted ? "Checked" : "Check"} 
-                        className={styles.icon} onClick={(e) => {e.stopPropagation(); onToggle(item.id)}}/>
+                    <Image width={32} height={32} className={styles.icon} 
+                        src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} 
+                        alt={item.isCompleted ? "Checked" : "Check"} 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onToggle(item.id)
+                        }}
+                    />
                     <div className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`}>{item.name}</div>
                     </div>
                 ))

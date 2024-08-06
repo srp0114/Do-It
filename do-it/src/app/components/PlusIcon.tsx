@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/app/styles/PlusIcon.module.css'
+import styles from '@/app/styles/PlusIcon.module.css';
 
 interface PlusIconProps {
     className?: string; 

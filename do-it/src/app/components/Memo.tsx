@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from '@/app/styles/Memo.module.css'
+import styles from '@/app/styles/Memo.module.css';
 
 interface MemoProps {
     initialMemo: string | null;
@@ -9,6 +9,7 @@ interface MemoProps {
 const Memo: React.FC<MemoProps> = ({ initialMemo, onMemoChange }) => {
     const [memo, setMemo] = useState<string>(initialMemo || '');
 
+    // 메모 내용 변경 핸들러
     const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newMemo = e.target.value;
         setMemo(newMemo);
@@ -19,7 +20,7 @@ const Memo: React.FC<MemoProps> = ({ initialMemo, onMemoChange }) => {
         <div className={styles.memoContainer}>
             <p className={styles.title}>Memo</p>
             <div className={styles.textContainer}>
-                <textarea 
+                <textarea
                     value={memo}
                     onChange={handleMemoChange}
                     className={styles.text}
