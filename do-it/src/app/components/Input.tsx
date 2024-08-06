@@ -52,7 +52,7 @@ const Input: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
                 <div className={styles.inputChild} />
             </div>
             <Button onClick={handleSubmit} text="추가하기"
-                Icon={name.trim() ? <Image src="/ic/plus.svg" alt="plus" width={16} height={16} /> : <PlusIcon />}
+                Icon = {<Image src={name.trim() ? "/ic/plus.svg" : "/ic/blackPlus.svg"} alt="plus" width={16} height={16} /> }
                 variant={name.trim() ? 'addActive' : 'add'}
             />
         </form>
