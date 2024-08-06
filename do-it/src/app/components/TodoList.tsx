@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import styles from '@/app/styles/TodoList.module.css'
-import { CheckListProps } from '@/app/components/types';
+import { CheckListProps } from '@/app/types/types';
 
 interface Item {
     id: number;

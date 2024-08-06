@@ -1,11 +1,10 @@
+'use client'
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import styles from '@/app/styles/GNB.module.css'
 
-
 const GNB: React.FC = () => {
     const router = useRouter();
-
     const handleLogoClick = () => {
         router.push('/');
     };

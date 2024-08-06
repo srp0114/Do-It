@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { useState, useEffect, useCallback } from 'react';
 import Input from '@/app/components/Input';
 import TodoList from '@/app/components/TodoList';
-import { TodoItem } from '@/app/components/types';
+import { TodoItem } from '@/app/types/types';
 import styles from '@/app/styles/Home.module.css'
 
 const PAGE_SIZE = 12;

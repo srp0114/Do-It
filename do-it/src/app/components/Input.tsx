@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import styles from '@/app/styles/Input.module.css'
 import Button from '@/app/components/Button';
-import { TodoInputProps, TodoItem } from '@/app/components/types';
+import { TodoInputProps, TodoItem } from '@/app/types/types';
 import PlusIcon from './PlusIcon';
 
 const Input: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
