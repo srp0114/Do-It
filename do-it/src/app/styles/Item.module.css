@@ -38,7 +38,7 @@
     width: auto;
     min-width: 0;
     box-sizing: content-box;
-    display: inline-block
+    display: inline-block;
 }
 
 .name {

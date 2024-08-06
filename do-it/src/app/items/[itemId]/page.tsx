@@ -56,7 +56,7 @@ const Detail: React.FC<DetailProps> = ({ params }) => {
             span.style.whiteSpace = 'nowrap';
             span.innerText = item?.name || '  ';
             document.body.appendChild(span);
-            input.style.width = `${span.offsetWidth}px`; 
+            input.style.width = `${span.offsetWidth + 2}px`; 
             document.body.removeChild(span);
         }
     }, [item?.name]);
@@ -72,7 +72,8 @@ const Detail: React.FC<DetailProps> = ({ params }) => {
     };
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        updateItemState({ name: e.target.value });
+        const newName = e.target.value;
+        updateItemState({ name: newName });
     };
 
     const handleToggle = async () => {
@@ -92,7 +93,6 @@ const Detail: React.FC<DetailProps> = ({ params }) => {
     const handleImageUrlChange = (url: string) => {
         updateItemState({ imageUrl: url });
     };
-
     
     const handleEdit = async () => {
         if (item && tenantId) {
@@ -107,12 +107,12 @@ const Detail: React.FC<DetailProps> = ({ params }) => {
                 setItem(updatedItem);
                 router.push('/');  
             } catch (error) {
-                alert('Failed to update item. Please try again.');
+                alert('할 일을 입력해주세요.');
             }
         }
     };
 
-  const handleDelete = async () => {
+    const handleDelete = async () => {
         if (item && tenantId) {
             try {
                 await deleteItem(tenantId, params.itemId);
@@ -123,37 +123,30 @@ const Detail: React.FC<DetailProps> = ({ params }) => {
         }
     }
   
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
-  if (!item) {
-    return <div>No item found.</div>;
-  }
+    if (!item) {
+        return <div>No item found.</div>;
+    }
 
-  return (
-    <div className={styles.parentContainer}>
-        <div key={item.id} className={`${styles.detailContainer} ${item.isCompleted ? styles.completed : styles.notDone}`}>
-        <Image 
-          width={32} 
-          height={32} 
-          src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`} 
-          alt={item.isCompleted ? "Checked" : "Check"} 
-          className={styles.icon}
-          onClick={handleToggle}
-        />
-         <input type="text" value={item.name} className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`} onChange={handleNameChange} ref={inputRef}/>
+    return (
+        <div className={styles.parentContainer}>
+            <div key={item.id} className={`${styles.detailContainer} ${item.isCompleted ? styles.completed : styles.notDone}`}>
+                <Image width={32} height={32} src={`/ic/${item.isCompleted ? 'checkedBox' : 'checkBox'}.svg`}  alt={item.isCompleted ? "Checked" : "Check"}  className={styles.icon} onClick={handleToggle}/>
+                <input type="text" value={item.name} className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`} onChange={handleNameChange} ref={inputRef}/>
+            </div>
+            <div className={styles.container}>
+                <Img imageUrl={item.imageUrl} tenantId={tenantId!} onImageUrlChange={handleImageUrlChange}/>
+                <Memo initialMemo={item.memo} onMemoChange={handleMemoChange} />
+            </div>
+            <div className={styles.buttonContainer}>
+                <Button onClick={handleEdit} text="수정 완료" Icon={<Image src="/ic/check.svg" alt="edit" width={24} height={24} />} variant={hasChanged ? 'editActive' : 'edit'}/>
+                <Button onClick={handleDelete} text="삭제하기" Icon={<Image src="/ic/X.svg" alt="delete" width={24} height={24} />} variant={'delete'}/>
+            </div>
         </div>
-        <div className={styles.container}>
-        <Img imageUrl={item.imageUrl} tenantId={tenantId!} onImageUrlChange={handleImageUrlChange}/>
-        <Memo initialMemo={item.memo} onMemoChange={handleMemoChange} />
-        </div>
-        <div className={styles.buttonContainer}>
-        <Button onClick={handleEdit} text="수정 완료" Icon={<Image src="/ic/check.svg" alt="edit" width={24} height={24} />} variant={hasChanged ? 'editActive' : 'edit'} />
-        <Button onClick={handleDelete} text="삭제하기" Icon={<Image src="/ic/X.svg" alt="delete" width={24} height={24} />} variant={'delete'}/>
-        </div>
-    </div>
-  );
+    );
 };
 
 export default Detail;

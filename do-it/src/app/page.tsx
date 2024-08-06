@@ -72,19 +72,20 @@ const Home: React.FC = () => {
             const itemToUpdate = localItems.find(item => item.id === itemId);
             if (!itemToUpdate) return;
 
+            if (itemToUpdate.name.trim() === '') {
+                throw new Error('Item name cannot be empty');
+            }
+
             const updatedItem = await updateItem(tenantId, itemId.toString(), {
+                name: itemToUpdate.name, // name 필드를 함께 전달
                 isCompleted: !itemToUpdate.isCompleted
             });
 
             setLocalItems(prevItems =>
-            prevItems.map(item =>
-                item.id === itemId
-                ? updatedItem 
-                : item
-            )
+                prevItems.map(item => item.id === itemId ? updatedItem : item)
             );
         } catch (error) {
-            alert('An error occurred');
+            console.error('Error updating item:', error);
         }
     };
 

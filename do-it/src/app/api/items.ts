@@ -76,13 +76,22 @@ export async function updateItem(
     throw new Error('Tenant ID and Item ID are required');
   }
 
- const requestBody: Partial<Item> = {
-    ...(item.name !== undefined && item.name !== '' && { name: item.name }),
+  // name과 isCompleted는 반드시 있어야 하며, name은 빈 문자열이 될 수 없음
+  if (item.name === undefined || item.name.trim() === '') {
+    throw new Error('Name cannot be empty');
+  }
+  
+  if (item.isCompleted === undefined) {
+    throw new Error('isCompleted is required');
+  }
+
+  const requestBody: Partial<Item> = {
+    name: item.name, 
+    isCompleted: item.isCompleted,
     ...(item.memo !== undefined && item.memo !== null && { memo: item.memo }),
     ...(item.imageUrl !== undefined && item.imageUrl !== null && { imageUrl: item.imageUrl }),
-    ...(item.isCompleted !== undefined && { isCompleted: item.isCompleted }),
   };
-  
+
   try {
     const response = await fetch(`${API_BASE_URL}/${tenantId}/items/${itemId}`, {
       method: 'PATCH',
