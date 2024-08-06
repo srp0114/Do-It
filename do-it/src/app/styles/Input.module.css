@@ -24,13 +24,16 @@
     box-sizing: border-box;
     z-index: 1;
     font-family: var(--font-family-NanumR);
-    color: var(--slate-500);
+    color: var(--slate-900);
 }
 
 .input:focus {
     outline: none;
     cursor: text;
-    color: var(--slate-900);
+}
+
+.input::placeholder {
+    color: var(--slate-500);
 }
 
 .inputChild {
