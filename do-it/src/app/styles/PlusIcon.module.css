@@ -9,7 +9,7 @@
     stroke-linecap: round;
 }
 
-@media (max-width: 375px) {
+@media (max-width: 444px) {
     .icon {
         width: 16px;
         height: 16px;
