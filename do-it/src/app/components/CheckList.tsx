@@ -26,17 +26,17 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onTog
     // 필터링된 항목 가져오기
     const filteredItems = items.filter(item => item.isCompleted === isCompleted);
     const title = isCompleted ? "done" : "todo";
-    const emptyMessage = isCompleted ? "완료된 할 일이 없어요." : "아직 다 한 일이 없어요."; 
+    const emptyMessage = isCompleted ? "아직 다 한 일이 없어요." : "할 일이 없어요."; 
     const nextMessage = isCompleted ? "해야 할 일을 체크해보세요!" : "TODO를 새롭게 추가해주세요!";
     
     return (
         <div className={styles.container}>
-            <Image width={101} height={36} src={`/images/${title}.svg`} alt={title} className={styles.title}/>
+            <Image width={101} height={36} src={`/images/${title}Title.svg`} alt={title} className={styles.title}/>
             <div className={styles.itemsContainer}>
                 {filteredItems.length === 0 ? (
                     <div className={styles.emptyState}>
                         <Image 
-                            src={`/images/Type=${title}, Size=Large.svg`} 
+                            src={`/images/${title}.svg`} 
                             alt="No Items" 
                             width={240} 
                             height={240} 

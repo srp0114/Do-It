@@ -63,13 +63,15 @@
 }
 
 .message {
-    color:var(--slate-400);
-    font-size: var(--font-size-16px);
-    font-weight: var(--font-weight-700);
     justify-content: center;
     margin:0;
 }
 
+@media (min-width: 745px) {
+    .emptyState {
+        margin-top:50px
+    }
+}
 
 @media (max-width: 745px) {
     .container{
@@ -87,5 +89,4 @@
         width: 120px;
         height: 120px;
     }
-
 }

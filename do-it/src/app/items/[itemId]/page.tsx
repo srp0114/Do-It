@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from '@/app/items/[itemId]/ItemDetail.module.css';
 import Image from 'next/image';
 import Img from '@/app/components/Img';
@@ -28,16 +28,33 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
     const [hasChanged, setHasChanged] = useState<boolean>(false);
     const router = useRouter();
 
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (item) {
-            const newName = e.target.value;
-            setItem(prevItem => ({
-                ...prevItem!,
-                name: newName
-            }));
-            setHasChanged(true);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        const input = inputRef.current;
+        if (input) {
+            const span = document.createElement('span');
+            span.style.fontSize = getComputedStyle(input).fontSize;
+            span.style.fontFamily = getComputedStyle(input).fontFamily;
+            span.style.visibility = 'hidden';
+            span.style.whiteSpace = 'nowrap';
+            span.innerText = item?.name || '  ';
+            document.body.appendChild(span);
+            input.style.width = `${span.offsetWidth}px`; 
+            document.body.removeChild(span);
         }
-    };
+    }, [item?.name]);
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (item) {
+              const newName = e.target.value;
+              setItem(prevItem => ({
+                  ...prevItem!,
+                  name: newName
+              }));
+              setHasChanged(true);
+          }
+      };
 
     const handleToggle = async () => {
         if (!item) return;
@@ -172,7 +189,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ params }) => {
           className={styles.icon}
           onClick={handleToggle}
         />
-         <input size={item.name.length *2} type="text" value={item.name} className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`} onChange={handleNameChange}/>
+         <input type="text" value={item.name} className={`${styles.name} ${item.isCompleted ? styles.completed : ""}`} onChange={handleNameChange} ref={inputRef}/>
         </div>
         <div className={styles.container}>
         <Img imageUrl={item.imageUrl} tenantId={tenantId!} onImageUrlChange={handleImageUrlChange}/>
