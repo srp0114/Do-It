@@ -47,8 +47,8 @@ const CheckList: React.FC<ExtendedCheckListProps> = ({ items, isCompleted, onTog
                         <p className={styles.message}>{nextMessage}</p>
                     </div>
                 ) : (
-                    filteredItems.map((item) => (
-                        <div key={item.id} className={`${styles.itemContainer} ${item.isCompleted ? styles.completed : styles.notDone}`} onClick={() => handleClick(item.id)}>
+                    filteredItems.map((item, index) => (
+                        <div key={index} className={`${styles.itemContainer} ${item.isCompleted ? styles.completed : styles.notDone}`} onClick={() => handleClick(item.id)}>
                             <Image 
                                 width={32} 
                                 height={32} 
