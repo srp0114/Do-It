@@ -1,4 +1,4 @@
-// api 모듈
+// 할 일 api 모듈
 import { Item } from '@/app/types/types';
 const API_BASE_URL = 'https://assignment-todolist-api.vercel.app/api';
 const PAGE_SIZE = 12;

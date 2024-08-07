@@ -6,6 +6,7 @@ interface MemoProps {
     onMemoChange: (newMemo: string) => void;
 }
 
+// 할 일 상세 페이지 메모 컴포넌트
 const Memo: React.FC<MemoProps> = ({ initialMemo, onMemoChange }) => {
     const [memo, setMemo] = useState<string>(initialMemo || '');
 

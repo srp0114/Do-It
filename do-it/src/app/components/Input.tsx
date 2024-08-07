@@ -11,7 +11,7 @@ interface TodoInputProps {
     onAddItem: (item: Item) => void;
 }
 
-// Input 컴포넌트
+// 할 일 추가 Input 컴포넌트
 const Input: React.FC<TodoInputProps> = ({ tenantId, onAddItem }) => {
     const [name, setName] = useState<string>(''); // input 필드값
     const [response, setResponse] = useState<Item | null>(null);

@@ -10,6 +10,7 @@ interface TodoListProps {
     onToggle: (itemId: number) => void;
 }
 
+// 할 일 목록 컴포넌트
 const TodoList: React.FC<TodoListProps> = ({ items, isCompleted, onToggle }) => {
     const router = useRouter();
         

@@ -9,12 +9,12 @@ interface ItemImage {
     onImageUrlChange: (url: string) => void; 
 }
 
-// 상세보기 페이지 이미지 컴포넌트
+// 할 일 상세 페이지 이미지 컴포넌트
 const Img: React.FC<ItemImage> = ({ imageUrl, tenantId, onImageUrlChange }) => {
     const [uploading, setUploading] = useState(false); // 이미지 업로드 
     const fileInputRef = useRef<HTMLInputElement | null>(null); // 파일입력 참조
 
-    // 파일 선택될 경우 호출되는 핸들러
+    // 파일 선택된 경우 호출되는 핸들러
     const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const selectedImage = e.target.files[0];

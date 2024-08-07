@@ -7,6 +7,7 @@ import Input from '@/app/components/Input';
 import TodoList from '@/app/components/TodoList';
 import styles from '@/app/styles/Home.module.css';
 
+// 할 일 목록 페이지
 const Home: React.FC = () => {
     const [tenantId, setTenantId] = useState<string>('');
     const [localItems, setLocalItems] = useState<Item[]>([]);
@@ -23,7 +24,7 @@ const Home: React.FC = () => {
         }
     }, []);
 
-    // react-query를 사용해 아이템 목록을 가져옴
+    // react-query를 사용해 아이템 목록을 가져오기
     const {
         data,
         fetchNextPage,
@@ -49,7 +50,7 @@ const Home: React.FC = () => {
         }
     );
 
-    // 스크롤 이벤트 핸들러 - 하단에 도달시 다음 페이지 가져옴
+    // 스크롤 이벤트 핸들러 - 하단에 도달시 다음 페이지 가져오기
     const handleScroll = useCallback(() => {
         if (
             window.innerHeight + document.documentElement.scrollTop + 100 >=
@@ -69,7 +70,7 @@ const Home: React.FC = () => {
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-    // 완료여부 변경 핸들러
+    // 할 일 상태 변경 핸들러
     const handleToggle = async (itemId: number) => {
         try {
             const itemToUpdate = localItems.find(item => item.id === itemId);
@@ -92,7 +93,7 @@ const Home: React.FC = () => {
         }
     };
 
-    // 아이템을 추가 핸들러
+    // 할 일 추가 핸들러
     const handleAddItem = (item: Item) => {
         setLocalItems(prevItems => [item, ...prevItems]); // 추가된 아이템 목록의 맨 위에 추가
     };

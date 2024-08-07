@@ -9,11 +9,11 @@ import Memo from '@/app/components/Memo';
 import Button from '@/app/components/Button';
 import styles from '@/app/styles/Item.module.css'
 
-
 interface DetailProps {
   params: { itemId: string };
 }
 
+// 할 일 상세 페이지
 const Detail: React.FC<DetailProps> = ({ params }) => {
     const [tenantId, setTenantId] = useState<string | null>(null);
     const [item, setItem] = useState<Item | null>(null);
@@ -65,7 +65,7 @@ const Detail: React.FC<DetailProps> = ({ params }) => {
         }
     }, [item?.name]);
 
-    // item 상태 변경 함수
+    // 할 일 상태 변경 함수
     const updateItemState = (updates: Partial<Item>) => {
         if (item) {
             setItem(prevItem => ({
@@ -82,7 +82,7 @@ const Detail: React.FC<DetailProps> = ({ params }) => {
         updateItemState({ name: newName });
     };
 
-    // 완료여부 변경 핸들러
+    // 할 일 상태 변경 핸들러
     const handleToggle = async () => {
         if (item) {
           const updatedItem = {
