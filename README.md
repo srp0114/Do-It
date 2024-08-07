@@ -21,10 +21,12 @@
 
 <br/>
 
-## 🚀 설치 및 실행
+## 🚀 실행 및 설치
 
-### 🏃‍♂️ 실행하기
+### 🏃🏻‍♂️ 실행하기
 [Do It!](https://young-do-it.vercel.app/) 에서 직접 사용해 보세요!
+
+<br/>
 
 ### 🔧 설치하기
 ```
@@ -38,12 +40,14 @@ npm run dev
 <br/>
 
 ### 🎨 화면
-- 할 일 화면
+- 할 일 목록 화면
 <img width="650" alt="홈화면" src="https://github.com/user-attachments/assets/fbf167bf-7f49-4db4-88e7-2b49206dc026">
 
-- 할 일 목록 및 추가 화면
+- 할 일 추가 화면
 <img width="650" alt="추가화면" src="https://github.com/user-attachments/assets/c77271f1-fb0a-456a-8b34-2b490d8c6da2">
 
 - 할 일 수정 화면
 <img width="650" alt="수정화면" src="https://github.com/user-attachments/assets/42204fd0-2074-4e8b-8998-4414463dcf3c">
+
+<br/>
 
