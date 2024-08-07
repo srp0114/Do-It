@@ -31,7 +31,7 @@
 ### 🔧 설치하기
 ```
 git clone https://github.com/srp0114/Do-It.git
-cd do-it
+cd Do-It/do-it
 npm install
 npm run dev
 ```
